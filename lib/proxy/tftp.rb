@@ -22,6 +22,21 @@ module Proxy::TFTP
       logger.warn "TFTP Adding entry failed: #{e}"
       false
     end
+    
+    
+    def create_default_menu config
+      if config.nil?
+        logger.info "invalid parameters recieved"
+        return false
+      end
+      
+      FileUtils.mkdir_p syslinux_dir
+      File.open(syslinux_default_menu, 'w') {|f| f.write(config) }
+    rescue StandardError => e
+      logger.warn "TFTP Adding default entry failed: #{e}"
+      false
+    end
+
 
     # removes links created by create method
     # Assumes we want to use pxelinux.cfg for configuration files.
@@ -64,6 +79,10 @@ module Proxy::TFTP
 
     def syslinux_mac mac
       "#{syslinux_dir}/01-"+mac.gsub(/:/,"-").downcase
+    end
+
+    def syslinux_default_menu
+      "#{syslinux_dir}/default"
     end
 
     def syslinux_dir

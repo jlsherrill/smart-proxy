@@ -6,6 +6,10 @@ post "/tftp/fetch_boot_file" do
   end
 end
 
+post "/tftp/create_default_menu" do
+  Proxy::TFTP.create_default_menu params[:menu]
+end
+
 # create a new TFTP reservation
 post "/tftp/:mac" do
   mac = params[:mac]
